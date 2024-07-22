@@ -58,10 +58,12 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
 
 4. **Email Log Sheet**
 
-   ```
-   | Timestamp | Order ID | COD Price | Currency | Name | Email | Language | Status | Send By |
-   ```
+   - The Email Log sheet should have the following structure:
 
+     ```
+     | Timestamp | Order ID | COD Price | Currency | Name | Email | Language | Status | Send By |
+     ```
+     
 6. **Google Apps Script**:
 
    - Open the script editor in your Google Sheet (`Extensions` > `Apps Script`).
