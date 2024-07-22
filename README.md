@@ -18,9 +18,9 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
 
 1. **Create a Google Sheet**:
 
-   - Create a Google Sheet with two sheets: `Orders` and `Email Template`.
+   - Create a Google Sheet with three sheets: `Orders`, `Email Template` and `Email Log`.
    
-3. **Orders Sheet**:
+2. **Orders Sheet**:
 
    - The `Orders` sheet should have the following columns starting from the first row:
 
@@ -29,7 +29,7 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      ```
    - Fill in the order details accordingly.
 
-4. **Email Template Sheet**:
+3. **Email Template Sheet**:
 
    - The `Email Template` sheet should have the following structure:
 
@@ -55,6 +55,12 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      ```
      Hello <<Name>>, <br><br> Your Order ID is <<Order ID>> with a COD price of <<COD Price>> <<Currency>>. <br><br> Thank you for your purchase! <br><br> Regards,<br>SITE_NAME!
      ```
+
+4. **Email Log Sheet**
+
+   ```
+   | Timestamp | Order ID | COD Price | Currency | Name | Email | Language | Status | Send By |
+   ```
 
 6. **Google Apps Script**:
 
