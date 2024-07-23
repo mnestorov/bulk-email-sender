@@ -102,10 +102,18 @@ function sendBulkEmails() {
     var userEmail = getUserEmail(); // Get the email of the person running the script
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Orders');
+    if (!sheet) {
+      Logger.log('Orders sheet not found');
+      return;
+    }
     var dataRange = sheet.getRange(2, 1, sheet.getLastRow() - 1, 6); // Read 6 columns: Order ID, COD Price, Currency, Name, Email, Language
     var data = dataRange.getValues();
   
     var templateSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Email Template');
+    if (!templateSheet) {
+      Logger.log('Email Template sheet not found');
+      return;
+    }
     var templateHeaders = templateSheet.getRange(1, 2, 1, templateSheet.getLastColumn() - 1).getValues()[0]; // Get language headers
     var templates = {};
 
