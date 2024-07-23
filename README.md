@@ -85,7 +85,7 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
 
    - After running the script, check the `Email Log` sheet to see the log entries, including the timestamp, order details, status, and sender email.
 
-## Script
+## Code.gs
 
 ```javascript
 function sendBulkEmails() {
@@ -227,6 +227,41 @@ function logCancelStatus() {
   logSheet.appendRow([formattedTimestamp, '', '', '', '', '', '', 'Canceled', senderEmail]);
 }
 ```
+## appsscript.json
+
+```json
+{
+  "timeZone": "Europe/Sofia",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Gmail",
+        "version": "v1",
+        "serviceId": "gmail"
+      },
+      {
+        "userSymbol": "Drive",
+        "version": "v3",
+        "serviceId": "drive"
+      },
+      {
+        "userSymbol": "Sheets",
+        "version": "v4",
+        "serviceId": "sheets"
+      }
+    ]
+  },
+  "oauthScopes": [
+    "https://mail.google.com/",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}
+```
+
 ## Contributing
 
 We welcome contributions from the community! If you would like to contribute, please fork the repository, make changes, and submit a pull request. You can also open an issue to discuss potential changes.
