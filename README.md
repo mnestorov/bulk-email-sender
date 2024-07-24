@@ -148,7 +148,7 @@ function sendBulkEmails() {
       var currency = data[i][2];
       var name = data[i][3];
       var email = data[i][4];
-      var language = data[i][5];
+      var language = data[i][5] || 'en'; // Default to English if language is empty
       
       var template = templates[language] || templates['en']; // Default to English if language not found
 
@@ -212,7 +212,7 @@ function getPaymentDetails() {
   var data = dataRange.getValues();
 
   var paymentDetails = {};
-  var currentCountry = 'en';
+  var currentCountry = null;
 
   for (var i = 0; i < data.length; i++) {
     var row = data[i];
