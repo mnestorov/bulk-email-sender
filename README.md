@@ -56,7 +56,9 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      Hello <<Name>>, <br><br> Your Order ID is <<Order ID>> with a COD price of <<COD Price>> <<Currency>>. <br><br> Thank you for your purchase! <br><br> Regards,<br>SITE_NAME!
      ```
 
-4. **Email Log Sheet**
+4. **Payment Details Sheet**
+
+5. **Email Log Sheet**
 
    - The Email Log sheet should have the following structure:
 
@@ -138,6 +140,7 @@ function sendBulkEmails() {
     }
 
     var logSheet = getLogSheet();
+    var paymentDetails = getPaymentDetails(); // Get payment details from the Payment Details sheet
   
     for (var i = 0; i < data.length; i++) {
       var orderId = data[i][0];
@@ -148,9 +151,19 @@ function sendBulkEmails() {
       var language = data[i][5];
       
       var template = templates[language] || templates['en']; // Default to English if language not found
-  
+
       var emailSubject = template.emailSubject.replace('<<Order ID>>', orderId);
-      var emailBody = `
+      var emailBody = template.emailBodyTemplate.replace('<<Order ID>>', orderId)
+                                                 .replace('<<COD Price>>', codPrice)
+                                                 .replace('<<Name>>', name)
+                                                 .replace('<<Currency>>', currency);
+
+      var paymentInfo = paymentDetails[language] || {};
+      var paymentDetailsString = formatPaymentDetails(paymentInfo);
+
+      emailBody = emailBody.replace('<<PAYMENT_DETAILS>>', paymentDetailsString);
+
+      emailBody = `
         <div style="max-width: 600px; margin: 0 auto; border: 1px solid #fff; padding: 0; font-family: Arial, sans-serif;">
           <div style="text-align: center;">
             <img src="${logoUrl}" alt="Logo" style="max-width: 140px; height: auto;"/>
@@ -159,10 +172,7 @@ function sendBulkEmails() {
             ${template.emailHeader}
           </div>
           <div style="padding: 20px; font-size: 16px; color: #333;">
-            ${template.emailBodyTemplate.replace('<<Order ID>>', orderId)
-                                        .replace('<<COD Price>>', codPrice)
-                                        .replace('<<Name>>', name)
-                                        .replace('<<Currency>>', currency)}
+            ${emailBody}
           </div>
         </div>
       `;
@@ -190,6 +200,45 @@ function sendBulkEmails() {
   } catch (e) {
     Logger.log('Error in sendBulkEmails function: ' + e.message);
   }
+}
+
+function getPaymentDetails() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Payment Details');
+  if (!sheet) {
+    Logger.log('Payment Details sheet not found');
+    return {};
+  }
+  var dataRange = sheet.getDataRange();
+  var data = dataRange.getValues();
+
+  var paymentDetails = {};
+  var currentCountry = 'en';
+
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    if (row[0] && !row[1]) { // New country section
+      currentCountry = row[0];
+      paymentDetails[currentCountry] = [];
+    } else if (currentCountry && row[1] === "" && row[2] === "") { // Handle blank line
+      paymentDetails[currentCountry].push({label: "", value: ""});
+    } else if (currentCountry && row[1] && row[2]) { // Add details to current country
+      paymentDetails[currentCountry].push({label: row[1], value: row[2]});
+    }
+  }
+
+  return paymentDetails;
+}
+
+function formatPaymentDetails(paymentInfo) {
+  var paymentDetailsString = "";
+  for (var i = 0; i < paymentInfo.length; i++) {
+    if (paymentInfo[i].label === "" && paymentInfo[i].value === "") {
+      paymentDetailsString += `<br>`; // Add blank line
+    } else {
+      paymentDetailsString += `<b>${paymentInfo[i].label}:</b> ${paymentInfo[i].value}<br>`;
+    }
+  }
+  return paymentDetailsString;
 }
 
 function getUserEmail() {
