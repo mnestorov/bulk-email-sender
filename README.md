@@ -11,6 +11,7 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
 - **Bulk Email Sending**: Sends emails to multiple recipients with customized content.
 - **Template-Based Emails**: Email content can be customized using templates.
 - **Dynamic Content Replacement**: Order ID, COD Price, Currency, and Name placeholders in the email body and subject are replaced with actual values.
+   - **Dynamic Tags**: `<<Order ID>>` | `<<COD Price>>` | `<<Name>>` | `<<Currency>>` | `<<PAYMENT_DETAILS>>`
 - **Logging**: Logs the status of each email sent, including the timestamp and the sender's email address.
 - **Fallback Email Handling**: Uses a default sender email if none is provided in the template.
 
@@ -44,17 +45,51 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      | Logo URL      | https://example.com/logo.png
      ```
 
-   - Example `Email Subject` text:
+   - Example `Email Subject` template 1:
 
      ```
-     SITE_NAME order number #<<Order ID>> - Missing payment
+     SITE_NAME order number #<<Order ID>> - Order received
      ```
     
-   - Example `Email Body` text:
+   - Example `Email Body` template 1:
 
      ```
-     Hello <<Name>>, <br><br> Your Order ID is <<Order ID>> with a COD price of <<COD Price>> <<Currency>>. <br><br> Thank you for your purchase! <br><br> Regards,<br>SITE_NAME!
+     Hello <<Name>>, <br><br>
+
+     Your Order ID is <<Order ID>> with a price of <<COD Price>> <<Currency>>. <br><br>
+
+     Thank you for your purchase! <br><br>
+
+     Regards,<br>
+     SITE_NAME!
      ```
+
+    - Example `Email Subject` template 2:
+
+      ```
+      SITE_NAME order number #<<Order ID>> - Missing payment
+      ```
+    
+   - Example `Email Body` template 2:
+
+      ```
+      Hello <<Name>>,<br><br> 
+
+      We are contacting you regarding your SITE_NAME order <b>#<<Order ID>></b> and amount to pay: <b><<COD Price>> <<Currency>></b>.<br><br> 
+      
+      We have not yet received payment for your order.<br><br> 
+      
+      You can pay for your order via: <br><br> 
+      
+      <<PAYMENT_DETAILS>>
+      
+      As a reason for payment, enter your order ID.<br><br> 
+      
+      Thank you in advance and we apologize for the inconvenience!<br><br> 
+      
+      Sincerely,<br>
+      SITE_NAME!
+      ```    
 
 4. **Payment Details Sheet**
 
