@@ -63,8 +63,9 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
    - The Email Log sheet should have the following structure:
 
      ```
-     | Timestamp | Order ID | COD Price | Currency | Name | Email | Language | Status | Send By |
+     | Timestamp | Order ID | COD Price | Currency | Name | Email | Language | Status | Send By | SM |
      ```
+   - `SM` is the count of the sended emails for each user.
      
 6. **Google Apps Script**:
 
@@ -257,7 +258,7 @@ function getLogSheet() {
     logSheet = spreadsheet.insertSheet('Email Log');
   }
   if (logSheet.getLastRow() === 0) {
-    logSheet.appendRow(['Timestamp', 'Order ID', 'COD Price', 'Currency', 'Name', 'Email', 'Language', 'Status', 'Sent From']);
+    logSheet.appendRow(['Timestamp', 'Order ID', 'COD Price', 'Currency', 'Name', 'Email', 'Language', 'Status', 'Sent From', 'SE']);
   }
   return logSheet;
 }
@@ -265,7 +266,19 @@ function getLogSheet() {
 function logEmailResult(logSheet, orderId, codPrice, currency, name, email, language, status, senderEmail) {
   var timestamp = new Date();
   var formattedTimestamp = Utilities.formatDate(timestamp, Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss');
-  logSheet.appendRow([formattedTimestamp, orderId, codPrice, currency, name, email, language, status, senderEmail]);
+  var sentEmailCount = getEmailCount(logSheet, email) + 1; // Increment the count by 1
+  logSheet.appendRow([formattedTimestamp, orderId, codPrice, currency, name, email, language, status, senderEmail, sentEmailCount]);
+}
+
+function getEmailCount(logSheet, email) {
+  var data = logSheet.getDataRange().getValues();
+  var count = 0;
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][5] === email) {
+      count++;
+    }
+  }
+  return count;
 }
 
 function logCancelStatus() {
@@ -273,7 +286,7 @@ function logCancelStatus() {
   var timestamp = new Date();
   var formattedTimestamp = Utilities.formatDate(timestamp, Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm:ss');
   var senderEmail = getUserEmail(); // Get the email of the person running the script
-  logSheet.appendRow([formattedTimestamp, '', '', '', '', '', '', 'Canceled', senderEmail]);
+  logSheet.appendRow([formattedTimestamp, '', '', '', '', '', '', 'Canceled', senderEmail, '']);
 }
 ```
 ## appsscript.json
