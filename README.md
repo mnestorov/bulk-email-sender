@@ -41,8 +41,9 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      | Email Subject | Subject in EN | Subject in ES | Subject in FR | ... |
      | Email Header  | Header in EN  | Header in ES  | Header in FR  | ... |
      | Email Body    | Body in EN    | Body in ES    | Body in FR    | ... |
-     | Sender Email  | sender@example.com
-     | Logo URL      | https://example.com/logo.png
+     | Sender Email  | sender@example.com                                  |
+     | Logo URL      | https://example.com/logo.png                        |
+     -----------------------------------------------------------------------
      ```
 
    - Example `Email Subject` template 1:
@@ -93,7 +94,23 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
 
 4. **Payment Details Sheet**
 
-5. **Email Log Sheet**
+   - The Payment Details sheet should have the following structure:
+   
+     ```
+     | en           |                ...                |          ...          |
+     ----------------------------------------------------------------------------
+     |              | PayPal                            | your_email@address    |
+     |              |                                   |                       |
+     |              | You can make payment also via:    |                       |
+     |              | Beneficient                       | YOUR COMPANY          |
+     |              | Bank                              | YOUR BANK             |
+     |              | IBAN                              | YOUR IBAN             |
+     |              | SWIFT                             | BANK SWIFT            |
+     |              | Bank Address                      | BANK ADDRESS          |
+     ----------------------------------------------------------------------------
+     ```
+
+6. **Email Log Sheet**
 
    - The Email Log sheet should have the following structure:
 
@@ -102,13 +119,13 @@ This Google Apps Script allows you to send bulk emails based on data from a Goog
      ```
    - `SM` is the count of the sended emails for each user.
      
-6. **Google Apps Script**:
+7. **Google Apps Script**:
 
    - Open the script editor in your Google Sheet (`Extensions` > `Apps Script`).
    - Copy and paste the provided script into the script editor.
    - Save the script.
 
-7. **Authorization**:
+8. **Authorization**:
 
    - Run the script for the first time and authorize the required permissions.
 
